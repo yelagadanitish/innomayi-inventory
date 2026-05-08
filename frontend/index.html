@@ -1,0 +1,1003 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+>
+
+<title>Innomayi Inventory</title>
+
+<style>
+
+/* ===============================
+GLOBAL
+=============================== */
+
+body{
+    margin:0;
+    font-family:Arial, sans-serif;
+    background:#F8FAFC;
+    color:#111827;
+}
+
+/* ===============================
+HEADER
+=============================== */
+
+.header{
+
+    background:linear-gradient(
+        90deg,
+        #0b1f3a,
+        #0b1f3a
+    );
+
+    padding:18px 22px;
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    flex-wrap:wrap;
+
+    box-shadow:0 4px 12px rgba(0,0,0,0.15);
+}
+
+/* LOGO */
+
+.logo-section{
+    display:flex;
+    align-items:center;
+}
+
+.logo{
+    height:60px;
+    object-fit:contain;
+}
+
+/* SEARCH */
+
+.search{
+
+    width:120px;
+
+    height:32px;
+
+    padding:4px 12px;
+
+    border:none;
+
+    border-radius:18px;
+
+    outline:none;
+
+    background:white;
+
+    transition:0.2s;
+}
+
+.search:focus{
+
+    width:150px;
+}
+
+/* ===============================
+CONTAINER
+=============================== */
+
+.container{
+
+    padding:18px;
+
+    display:grid;
+
+    grid-template-columns:
+        repeat(auto-fit,minmax(320px,1fr));
+
+    gap:18px;
+}
+
+/* ===============================
+BOX
+=============================== */
+
+.box{
+
+    background:white;
+
+    border-radius:16px;
+
+    padding:16px;
+
+    box-shadow:
+        0 4px 14px rgba(0,0,0,0.08);
+
+    transition:0.2s;
+}
+
+.box:hover{
+
+    transform:translateY(-3px);
+}
+
+.box h3{
+
+    margin-top:0;
+
+    color:#0B1F3A;
+}
+
+/* ===============================
+COMPONENT
+=============================== */
+
+.component{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    flex-wrap:wrap;
+
+    background:#EFF6FF;
+
+    border:1px solid #DBEAFE;
+
+    padding:10px 12px;
+
+    border-radius:14px;
+
+    margin-top:10px;
+}
+
+.comp-left{
+
+    font-size:14px;
+
+    font-weight:600;
+}
+
+.comp-right{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:8px;
+}
+
+/* ===============================
+BUTTONS
+=============================== */
+
+.qty-btn{
+
+    width:24px;
+
+    height:24px;
+
+    border:none;
+
+    border-radius:50%;
+
+    background:#2563EB;
+
+    color:white;
+
+    cursor:pointer;
+
+    font-size:14px;
+
+    transition:0.2s;
+}
+
+.qty-btn:hover{
+
+    transform:scale(1.1);
+}
+
+.qty{
+
+    font-weight:bold;
+
+    color:#0B1F3A;
+}
+
+.delete-btn{
+
+    color:red;
+
+    cursor:pointer;
+
+    font-weight:bold;
+
+    font-size:18px;
+}
+
+/* ===============================
+FLOATING BUTTON
+=============================== */
+
+.fab{
+
+    position:fixed;
+
+    bottom:22px;
+
+    right:22px;
+
+    width:60px;
+
+    height:60px;
+
+    border:none;
+
+    border-radius:50%;
+
+    background:#2563EB;
+
+    color:white;
+
+    font-size:30px;
+
+    cursor:pointer;
+
+    box-shadow:
+        0 4px 14px rgba(0,0,0,0.2);
+
+    transition:0.2s;
+}
+
+.fab:hover{
+
+    transform:scale(1.08);
+}
+
+/* ===============================
+MODAL
+=============================== */
+
+.modal{
+
+    display:none;
+
+    position:fixed;
+
+    top:0;
+
+    left:0;
+
+    width:100%;
+
+    height:100%;
+
+    background:rgba(0,0,0,0.5);
+
+    justify-content:center;
+
+    align-items:center;
+
+    z-index:999;
+}
+
+.modal-content{
+
+    background:white;
+
+    width:320px;
+
+    padding:22px;
+
+    border-radius:16px;
+
+    box-shadow:
+        0 6px 18px rgba(0,0,0,0.2);
+}
+
+.modal-content h3{
+
+    margin-top:0;
+
+    color:#0B1F3A;
+}
+
+.modal-content input{
+
+    width:100%;
+
+    padding:10px;
+
+    margin-top:10px;
+
+    border:1px solid #CBD5E1;
+
+    border-radius:10px;
+
+    box-sizing:border-box;
+}
+
+.modal-content button{
+
+    margin-top:15px;
+
+    width:100%;
+
+    padding:10px;
+
+    border:none;
+
+    border-radius:10px;
+
+    background:#2563EB;
+
+    color:white;
+
+    cursor:pointer;
+
+    font-weight:bold;
+}
+
+.close-btn{
+
+    float:right;
+
+    cursor:pointer;
+
+    font-size:20px;
+}
+
+/* ===============================
+TOAST
+=============================== */
+
+.toast{
+
+    position:fixed;
+
+    top:20px;
+
+    right:20px;
+
+    background:#2563EB;
+
+    color:white;
+
+    padding:12px 16px;
+
+    border-radius:10px;
+
+    opacity:0;
+
+    transition:0.3s;
+
+    z-index:1000;
+}
+
+.toast.show{
+
+    opacity:1;
+}
+
+/* ===============================
+LOGS
+=============================== */
+
+.logs{
+
+    background:white;
+
+    margin:18px;
+
+    padding:16px;
+
+    border-radius:16px;
+
+    box-shadow:
+        0 4px 14px rgba(0,0,0,0.08);
+}
+
+.logs h3{
+
+    margin-top:0;
+
+    color:#0B1F3A;
+}
+
+.log-item{
+
+    padding:10px;
+
+    border-bottom:1px solid #E2E8F0;
+
+    font-size:14px;
+}
+
+/* ===============================
+MOBILE RESPONSIVE
+=============================== */
+
+@media(max-width:768px){
+
+    .header{
+
+        flex-direction:column;
+
+        gap:12px;
+    }
+
+    .logo{
+
+        height:45px;
+    }
+
+    .search{
+
+        width:100%;
+    }
+
+    .container{
+
+        grid-template-columns:1fr;
+    }
+
+    .component{
+
+        flex-direction:column;
+
+        align-items:flex-start;
+
+        gap:10px;
+    }
+
+    .comp-right{
+
+        width:100%;
+
+        justify-content:flex-start;
+    }
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<!-- ===============================
+HEADER
+=============================== -->
+
+<div class="header">
+
+    <div class="logo-section">
+
+        <img
+            src="logo.png"
+            alt="Innomayi Logo"
+            class="logo"
+        >
+
+    </div>
+
+    <input
+        id="search"
+        class="search"
+        placeholder="Search..."
+    >
+
+</div>
+
+<!-- ===============================
+INVENTORY
+=============================== -->
+
+<div
+    id="inventory"
+    class="container"
+></div>
+
+<!-- ===============================
+ACTIVITY LOGS
+=============================== -->
+
+<div class="logs">
+
+    <h3>🧾 Activity Logs</h3>
+
+    <div id="logs"></div>
+
+</div>
+
+<!-- ===============================
+FLOAT BUTTON
+=============================== -->
+
+<button
+    id="openModal"
+    class="fab"
+>
++
+</button>
+
+<!-- ===============================
+MODAL
+=============================== -->
+
+<div
+    class="modal"
+    id="modal"
+>
+
+    <div class="modal-content">
+
+        <span
+            class="close-btn"
+            onclick="closeModal()"
+        >
+        ×
+        </span>
+
+        <h3>Add Component</h3>
+
+        <input
+            id="box"
+            placeholder="Box Name"
+        >
+
+        <input
+            id="component"
+            placeholder="Component Name"
+        >
+
+        <input
+            id="quantity"
+            placeholder="Quantity"
+            type="number"
+        >
+
+        <button onclick="addComponent()">
+            Add Component
+        </button>
+
+        <hr>
+
+        <h3>Create Box</h3>
+
+        <input
+            id="newBox"
+            placeholder="New Box"
+        >
+
+        <button onclick="addBox()">
+            Create Box
+        </button>
+
+    </div>
+
+</div>
+
+<!-- ===============================
+TOAST
+=============================== -->
+
+<div
+    id="toast"
+    class="toast"
+></div>
+
+<script>
+
+let inventory = {};
+
+/* ===============================
+LOAD INVENTORY
+=============================== */
+
+async function loadInventory(){
+
+    const res = await fetch(
+        "http://localhost:5000/inventory"
+    );
+
+    const data = await res.json();
+
+    let formatted = {};
+
+    data.forEach(item=>{
+
+        if(!formatted[item.box]){
+
+            formatted[item.box] = [];
+        }
+
+        formatted[item.box].push({
+
+            name:item.component,
+
+            quantity:item.quantity
+        });
+    });
+
+    inventory = formatted;
+
+    render();
+}
+
+/* ===============================
+LOAD LOGS
+=============================== */
+
+async function loadLogs(){
+
+    const res = await fetch(
+        "http://localhost:5000/logs"
+    );
+
+    const data = await res.json();
+
+    let html = "";
+
+    data.forEach(log=>{
+
+        html += `
+        <div class="log-item">
+
+            ${log.action_text}
+
+        </div>
+        `;
+    });
+
+    document.getElementById("logs")
+    .innerHTML = html;
+}
+
+/* ===============================
+RENDER
+=============================== */
+
+function render(){
+
+    let html = "";
+
+    for(let box in inventory){
+
+        html += `
+        <div class="box">
+
+            <h3>📦 Box ${box}</h3>
+        `;
+
+        inventory[box].forEach(c=>{
+
+            html += `
+            <div class="component">
+
+                <div class="comp-left">
+
+                    ${c.name}
+
+                </div>
+
+                <div class="comp-right">
+
+                    <button
+                        class="qty-btn"
+                        onclick="
+                        updateQuantity(
+                            '${c.name}',
+                            '${box}',
+                            'decrease'
+                        )"
+                    >
+                    -
+                    </button>
+
+                    <span class="qty">
+
+                        ${c.quantity}
+
+                    </span>
+
+                    <button
+                        class="qty-btn"
+                        onclick="
+                        updateQuantity(
+                            '${c.name}',
+                            '${box}',
+                            'increase'
+                        )"
+                    >
+                    +
+                    </button>
+
+                    <span
+                        class="delete-btn"
+                        onclick="
+                        deleteComponent(
+                            '${c.name}',
+                            '${box}'
+                        )"
+                    >
+                    ×
+                    </span>
+
+                </div>
+
+            </div>
+            `;
+        });
+
+        html += `</div>`;
+    }
+
+    document.getElementById("inventory")
+    .innerHTML = html;
+}
+
+/* ===============================
+TOAST
+=============================== */
+
+function showToast(msg){
+
+    const toast =
+        document.getElementById("toast");
+
+    toast.innerText = msg;
+
+    toast.classList.add("show");
+
+    setTimeout(()=>{
+
+        toast.classList.remove("show");
+
+    },2000);
+}
+
+/* ===============================
+ADD COMPONENT
+=============================== */
+
+async function addComponent(){
+
+    const box =
+        document.getElementById("box").value;
+
+    const component =
+        document.getElementById("component").value;
+
+    const quantity =
+        document.getElementById("quantity").value;
+
+    await fetch(
+        "http://localhost:5000/add-component",
+        {
+
+            method:"POST",
+
+            headers:{
+                "Content-Type":"application/json"
+            },
+
+            body:JSON.stringify({
+
+                box,
+                component,
+                quantity
+            })
+        }
+    );
+
+    showToast("✔ Component Added");
+
+    loadInventory();
+
+    loadLogs();
+
+    closeModal();
+}
+
+/* ===============================
+ADD BOX
+=============================== */
+
+async function addBox(){
+
+    const box =
+        document.getElementById("newBox").value;
+
+    await fetch(
+        "http://localhost:5000/add-box",
+        {
+
+            method:"POST",
+
+            headers:{
+                "Content-Type":"application/json"
+            },
+
+            body:JSON.stringify({box})
+        }
+    );
+
+    showToast("📦 Box Created");
+
+    loadInventory();
+
+    loadLogs();
+
+    closeModal();
+}
+
+/* ===============================
+DELETE COMPONENT
+=============================== */
+
+async function deleteComponent(
+    name,
+    box
+){
+
+    if(!confirm(
+        "Delete component?"
+    )) return;
+
+    await fetch(
+        "http://localhost:5000/delete-component",
+        {
+
+            method:"DELETE",
+
+            headers:{
+                "Content-Type":"application/json"
+            },
+
+            body:JSON.stringify({
+
+                name,
+                box
+            })
+        }
+    );
+
+    showToast("❌ Component Deleted");
+
+    loadInventory();
+
+    loadLogs();
+}
+
+/* ===============================
+UPDATE QUANTITY
+=============================== */
+
+async function updateQuantity(
+    name,
+    box,
+    action
+){
+
+    await fetch(
+        "http://localhost:5000/update-quantity",
+        {
+
+            method:"PUT",
+
+            headers:{
+                "Content-Type":"application/json"
+            },
+
+            body:JSON.stringify({
+
+                name,
+                box,
+                action
+            })
+        }
+    );
+
+    loadInventory();
+
+    loadLogs();
+}
+
+/* ===============================
+SEARCH
+=============================== */
+
+document
+.getElementById("search")
+.addEventListener(
+    "input",
+    async(e)=>{
+
+    const q = e.target.value;
+
+    if(!q){
+
+        return loadInventory();
+    }
+
+    const res = await fetch(
+        `http://localhost:5000/search?q=${q}`
+    );
+
+    const data = await res.json();
+
+    let formatted = {};
+
+    data.forEach(item=>{
+
+        if(!formatted[item.box]){
+
+            formatted[item.box] = [];
+        }
+
+        formatted[item.box].push({
+
+            name:item.component,
+
+            quantity:item.quantity
+        });
+    });
+
+    inventory = formatted;
+
+    render();
+});
+
+/* ===============================
+MODAL
+=============================== */
+
+document
+.getElementById("openModal")
+.onclick = ()=>{
+
+    document
+    .getElementById("modal")
+    .style.display = "flex";
+};
+
+function closeModal(){
+
+    document
+    .getElementById("modal")
+    .style.display = "none";
+}
+
+window.onclick = (e)=>{
+
+    if(
+        e.target ===
+        document.getElementById("modal")
+    ){
+
+        closeModal();
+    }
+};
+
+/* ===============================
+INITIAL LOAD
+=============================== */
+
+loadInventory();
+
+loadLogs();
+
+</script>
+
+</body>
+
+</html>
