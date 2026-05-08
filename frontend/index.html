@@ -606,7 +606,7 @@ LOAD INVENTORY
 async function loadInventory(){
 
     const res = await fetch(
-        "http://localhost:5000/inventory"
+        "https://innomayi-inventory.onrender.com/inventory"
     );
 
     const data = await res.json();
@@ -640,7 +640,7 @@ LOAD LOGS
 async function loadLogs(){
 
     const res = await fetch(
-        "http://localhost:5000/logs"
+        "https://innomayi-inventory.onrender.com/logs"
     );
 
     const data = await res.json();
@@ -781,7 +781,7 @@ async function addComponent(){
         document.getElementById("quantity").value;
 
     await fetch(
-        "http://localhost:5000/add-component",
+        "https://innomayi-inventory.onrender.com/add-component",
         {
 
             method:"POST",
@@ -818,7 +818,7 @@ async function addBox(){
         document.getElementById("newBox").value;
 
     await fetch(
-        "http://localhost:5000/add-box",
+        "https://innomayi-inventory.onrender.com/add-box",
         {
 
             method:"POST",
@@ -854,7 +854,7 @@ async function deleteComponent(
     )) return;
 
     await fetch(
-        "http://localhost:5000/delete-component",
+        "https://innomayi-inventory.onrender.com/delete-component",
         {
 
             method:"DELETE",
@@ -889,7 +889,7 @@ async function updateQuantity(
 ){
 
     await fetch(
-        "http://localhost:5000/update-quantity",
+        "https://innomayi-inventory.onrender.com/update-quantity",
         {
 
             method:"PUT",
