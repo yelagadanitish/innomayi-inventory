@@ -1,265 +1,315 @@
-// ===============================
-// server.js
-// ===============================
-
-require("dotenv").config();
 const express = require("express");
+const mysql = require("mysql2");
 const cors = require("cors");
-const db = require("./db");
+require("dotenv").config();
+
 const app = express();
+
 app.use(cors());
 app.use(express.json());
 
-/* =========================================
-   GET INVENTORY
-========================================= */
-app.get("/inventory", (req, res) => {
+/* ===============================
+DATABASE CONNECTION
+=============================== */
 
-  const query = `
-    SELECT 
-      boxes.name AS box,
-      components.name AS component,
-      components.quantity AS quantity
-    FROM components
-    JOIN boxes ON components.box_id = boxes.id
-    ORDER BY boxes.name;
-  `;
+const db = mysql.createConnection({
 
-  db.query(query, (err, result) => {
+    host: process.env.DB_HOST,
 
-    if (err) {
-      console.error(err);
-      return res.status(500).send(err);
-    }
+    user: process.env.DB_USER,
 
-    res.json(result);
-  });
+    password: process.env.DB_PASSWORD,
+
+    database: process.env.DB_NAME,
+
+    port: process.env.DB_PORT
 });
 
-/* =========================================
-   SEARCH
-========================================= */
-app.get("/search", (req, res) => {
+db.connect((err)=>{
 
-  const q = req.query.q || "";
+    if(err){
 
-  const query = `
-    SELECT 
-      boxes.name AS box,
-      components.name AS component,
-      components.quantity AS quantity
-    FROM components
-    JOIN boxes ON components.box_id = boxes.id
-    WHERE components.name LIKE ?
-  `;
-
-  db.query(query, [`%${q}%`], (err, result) => {
-
-    if (err) {
-      console.error(err);
-      return res.status(500).send(err);
-    }
-
-    res.json(result);
-  });
-});
-
-/* =========================================
-   GET LOGS
-========================================= */
-app.get("/logs", (req, res) => {
-
-  db.query(
-    `
-    SELECT * FROM activity_logs
-    ORDER BY created_at DESC
-    LIMIT 20
-    `,
-    (err, result) => {
-
-      if (err) {
-        console.error(err);
-        return res.status(500).send(err);
-      }
-
-      res.json(result);
-    }
-  );
-});
-
-/* =========================================
-   ADD LOG FUNCTION
-========================================= */
-function addLog(text){
-
-  db.query(
-    `
-    INSERT INTO activity_logs(action_text)
-    VALUES(?)
-    `,
-    [text]
-  );
-}
-
-/* =========================================
-   ADD COMPONENT
-========================================= */
-app.post("/add-component", (req, res) => {
-
-  const { box, component, quantity } = req.body;
-
-  if (!box || !component) {
-    return res.status(400).send("Missing data");
-  }
-
-  db.query(
-    "SELECT id FROM boxes WHERE name=?",
-    [box],
-    (err, result) => {
-
-      if (err) {
-        console.error(err);
-        return res.status(500).send(err);
-      }
-
-      if (result.length === 0) {
-
-        db.query(
-          "INSERT INTO boxes(name) VALUES(?)",
-          [box],
-          (err, boxRes) => {
-
-            if (err) {
-              console.error(err);
-              return res.status(500).send(err);
-            }
-
-            insertComponent(boxRes.insertId);
-          }
+        console.log(
+            "❌ Database connection failed:",
+            err
         );
 
-      } else {
+    }else{
 
-        insertComponent(result[0].id);
-
-      }
+        console.log(
+            "✅ MySQL Connected"
+        );
     }
-  );
+});
 
-  function insertComponent(boxId){
+/* ===============================
+GET INVENTORY
+=============================== */
 
-    db.query(
-      `
-      INSERT INTO components(name, box_id, quantity)
-      VALUES(?,?,?)
-      `,
-      [component, boxId, quantity || 0],
-      (err) => {
+app.get("/inventory",(req,res)=>{
 
-        if (err) {
-          console.error(err);
-          return res.status(500).send(err);
+    const sql = `
+    
+    SELECT
+
+        components.id,
+
+        components.name,
+
+        components.quantity,
+
+        boxes.name AS box
+
+    FROM components
+
+    JOIN boxes
+
+    ON components.box_id = boxes.id
+
+    ORDER BY boxes.name
+
+    `;
+
+    db.query(sql,(err,result)=>{
+
+        if(err){
+
+            return res.status(500).json(err);
         }
 
-        addLog(`Added ${component} (${quantity}) in Box ${box}`);
-
-        res.json({message:"Added successfully"});
-      }
-    );
-  }
+        res.json(result);
+    });
 });
 
-/* =========================================
-   ADD BOX
-========================================= */
-app.post("/add-box", (req, res) => {
+/* ===============================
+ADD COMPONENT
+=============================== */
 
-  const { box } = req.body;
+app.post("/add-component",(req,res)=>{
 
-  db.query(
-    `
+    const {
+        box,
+        name,
+        quantity
+    } = req.body;
+
+    const getBox = `
+    
+    SELECT id
+    
+    FROM boxes
+    
+    WHERE name = ?
+    
+    `;
+
+    db.query(
+        getBox,
+        [box],
+        (err,result)=>{
+
+        if(err){
+
+            return res.status(500).json(err);
+        }
+
+        if(result.length === 0){
+
+            return res
+            .status(404)
+            .json({
+                error:"Box not found"
+            });
+        }
+
+        const boxId = result[0].id;
+
+        const sql = `
+        
+        INSERT INTO components
+        (
+            name,
+            quantity,
+            box_id
+        )
+        
+        VALUES(?,?,?)
+        
+        `;
+
+        db.query(
+            sql,
+            [
+                name,
+                quantity,
+                boxId
+            ],
+            (err,result)=>{
+
+            if(err){
+
+                return res.status(500).json(err);
+            }
+
+            res.json({
+                success:true
+            });
+        });
+
+    });
+});
+
+/* ===============================
+ADD BOX
+=============================== */
+
+app.post("/add-box",(req,res)=>{
+
+    const { box } = req.body;
+
+    const sql = `
+    
     INSERT INTO boxes(name)
+
     VALUES(?)
-    `,
-    [box],
-    (err) => {
+    
+    `;
 
-      if (err) {
-        console.error(err);
-        return res.status(500).send("Box exists");
-      }
+    db.query(
+        sql,
+        [box],
+        (err,result)=>{
 
-      addLog(`Created Box ${box}`);
+        if(err){
 
-      res.json({message:"Box created"});
-    }
-  );
+            return res.status(500).json(err);
+        }
+
+        res.json({
+            success:true
+        });
+    });
 });
 
-/* =========================================
-   DELETE COMPONENT
-========================================= */
-app.delete("/delete-component", (req, res) => {
+/* ===============================
+UPDATE QUANTITY
+=============================== */
 
-  const { name, box } = req.body;
+app.put(
+    "/update-quantity/:id",
+    (req,res)=>{
 
-  const query = `
-    DELETE components
-    FROM components
-    JOIN boxes ON components.box_id = boxes.id
-    WHERE components.name=? AND boxes.name=?
-  `;
+    const { id } = req.params;
 
-  db.query(query, [name, box], (err) => {
+    const { quantity } = req.body;
 
-    if (err) {
-      console.error(err);
-      return res.status(500).send(err);
-    }
-
-    addLog(`Deleted ${name} from Box ${box}`);
-
-    res.json({message:"Deleted"});
-  });
-});
-
-/* =========================================
-   UPDATE QUANTITY
-========================================= */
-app.put("/update-quantity", (req, res) => {
-
-  const { name, box, action } = req.body;
-
-  const operation =
-    action === "increase"
-      ? "quantity + 1"
-      : "GREATEST(quantity - 1,0)";
-
-  const query = `
+    const sql = `
+    
     UPDATE components
-    JOIN boxes ON components.box_id = boxes.id
-    SET components.quantity = ${operation}
-    WHERE components.name=? AND boxes.name=?
-  `;
 
-  db.query(query, [name, box], (err) => {
+    SET quantity = ?
 
-    if (err) {
-      console.error(err);
-      return res.status(500).send(err);
-    }
+    WHERE id = ?
+    
+    `;
 
-    addLog(`${action} quantity for ${name} in Box ${box}`);
+    db.query(
+        sql,
+        [
+            quantity,
+            id
+        ],
+        (err,result)=>{
 
-    res.json({message:"Updated"});
-  });
+        if(err){
+
+            return res.status(500).json(err);
+        }
+
+        res.json({
+            success:true
+        });
+    });
 });
 
-/* =========================================
-   SERVER
-========================================= */
-app.listen(5000, () => {
+/* ===============================
+DELETE COMPONENT
+=============================== */
 
-  console.log("🚀 Server running on port 5000");
+app.delete(
+    "/delete-component/:id",
+    (req,res)=>{
 
+    const { id } = req.params;
+
+    const sql = `
+    
+    DELETE FROM components
+
+    WHERE id = ?
+    
+    `;
+
+    db.query(
+        sql,
+        [id],
+        (err,result)=>{
+
+        if(err){
+
+            return res.status(500).json(err);
+        }
+
+        res.json({
+            success:true
+        });
+    });
+});
+
+/* ===============================
+ADMIN LOGIN
+=============================== */
+
+app.post(
+    "/admin-login",
+    (req,res)=>{
+
+    const {
+        username,
+        password
+    } = req.body;
+
+    const adminUser = "admin";
+
+    const adminPass = "innomayi123";
+
+    if(
+        username === adminUser &&
+        password === adminPass
+    ){
+
+        res.json({
+            success:true
+        });
+
+    }else{
+
+        res.status(401).json({
+            success:false
+        });
+    }
+});
+
+/* ===============================
+START SERVER
+=============================== */
+
+const PORT =
+    process.env.PORT || 5000;
+
+app.listen(PORT,()=>{
+
+    console.log(
+        `🚀 Server running on ${PORT}`
+    );
 });
