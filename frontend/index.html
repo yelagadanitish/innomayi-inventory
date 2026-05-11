@@ -14,13 +14,9 @@
 
 <style>
 
-/* ===============================
-GLOBAL
-=============================== */
-
 body{
     margin:0;
-    font-family:Arial, sans-serif;
+    font-family:Arial,sans-serif;
     background:#F8FAFC;
     color:#111827;
 }
@@ -46,20 +42,9 @@ HEADER
     box-shadow:0 4px 12px rgba(0,0,0,0.15);
 }
 
-.logo-section{
-
-    display:flex;
-
-    align-items:center;
-
-    gap:12px;
-}
-
 .logo{
 
     height:60px;
-
-    object-fit:contain;
 }
 
 .header-right{
@@ -71,13 +56,11 @@ HEADER
     gap:10px;
 }
 
-/* SEARCH */
-
 .search{
 
-    width:120px;
+    width:160px;
 
-    height:32px;
+    height:34px;
 
     padding:4px 12px;
 
@@ -86,25 +69,10 @@ HEADER
     border-radius:18px;
 
     outline:none;
-
-    background:white;
-
-    transition:0.2s;
 }
-
-.search:focus{
-
-    width:160px;
-}
-
-/* BUTTONS */
 
 .admin-btn,
 .logout-btn{
-
-    background:#2563EB;
-
-    color:white;
 
     border:none;
 
@@ -112,22 +80,21 @@ HEADER
 
     border-radius:12px;
 
+    color:white;
+
     cursor:pointer;
 
     font-weight:bold;
+}
 
-    transition:0.2s;
+.admin-btn{
+
+    background:#2563EB;
 }
 
 .logout-btn{
 
     background:#DC2626;
-}
-
-.admin-btn:hover,
-.logout-btn:hover{
-
-    transform:scale(1.05);
 }
 
 /* ===============================
@@ -160,13 +127,6 @@ BOX
 
     box-shadow:
         0 4px 14px rgba(0,0,0,0.08);
-
-    transition:0.2s;
-}
-
-.box:hover{
-
-    transform:translateY(-3px);
 }
 
 .box h3{
@@ -203,8 +163,6 @@ COMPONENT
 
 .comp-left{
 
-    font-size:14px;
-
     font-weight:600;
 }
 
@@ -223,9 +181,9 @@ BUTTONS
 
 .qty-btn{
 
-    width:24px;
+    width:26px;
 
-    height:24px;
+    height:26px;
 
     border:none;
 
@@ -237,44 +195,26 @@ BUTTONS
 
     cursor:pointer;
 
-    font-size:14px;
-
-    transition:0.2s;
-}
-
-.qty-btn:hover{
-
-    transform:scale(1.1);
+    font-size:15px;
 }
 
 .qty{
 
     font-weight:bold;
+}
 
-    color:#0B1F3A;
+.delete-btn,
+.edit-btn{
+
+    cursor:pointer;
+
+    font-size:18px;
 }
 
 .delete-btn{
 
     color:red;
-
-    cursor:pointer;
-
-    font-weight:bold;
-
-    font-size:18px;
 }
-
-.edit-btn{
-
-    cursor:pointer;
-
-    font-size:16px;
-}
-
-/* ===============================
-ADMIN ONLY
-=============================== */
 
 .admin-only{
 
@@ -286,7 +226,7 @@ ADMIN ONLY
 }
 
 /* ===============================
-FLOATING BUTTON
+FLOAT BUTTON
 =============================== */
 
 .fab{
@@ -312,16 +252,6 @@ FLOATING BUTTON
     font-size:30px;
 
     cursor:pointer;
-
-    box-shadow:
-        0 4px 14px rgba(0,0,0,0.2);
-
-    transition:0.2s;
-}
-
-.fab:hover{
-
-    transform:scale(1.08);
 }
 
 /* ===============================
@@ -360,18 +290,6 @@ MODAL
     padding:22px;
 
     border-radius:16px;
-
-    box-shadow:
-        0 6px 18px rgba(0,0,0,0.2);
-
-    animation:popup 0.25s ease;
-}
-
-.modal-content h3{
-
-    margin-top:0;
-
-    color:#0B1F3A;
 }
 
 .modal-content input{
@@ -382,18 +300,18 @@ MODAL
 
     margin-top:10px;
 
-    border:1px solid #CBD5E1;
-
     border-radius:10px;
+
+    border:1px solid #CBD5E1;
 
     box-sizing:border-box;
 }
 
 .modal-content button{
 
-    margin-top:15px;
-
     width:100%;
+
+    margin-top:15px;
 
     padding:10px;
 
@@ -406,8 +324,6 @@ MODAL
     color:white;
 
     cursor:pointer;
-
-    font-weight:bold;
 }
 
 .close-btn{
@@ -417,19 +333,6 @@ MODAL
     cursor:pointer;
 
     font-size:20px;
-}
-
-@keyframes popup{
-
-    from{
-        transform:scale(0.8);
-        opacity:0;
-    }
-
-    to{
-        transform:scale(1);
-        opacity:1;
-    }
 }
 
 /* ===============================
@@ -455,38 +358,11 @@ TOAST
     opacity:0;
 
     transition:0.3s;
-
-    z-index:1000;
 }
 
 .toast.show{
 
     opacity:1;
-}
-
-/* ===============================
-LOGS
-=============================== */
-
-.logs{
-
-    background:white;
-
-    margin:18px;
-
-    padding:16px;
-
-    border-radius:16px;
-
-    box-shadow:
-        0 4px 14px rgba(0,0,0,0.08);
-}
-
-.logs h3{
-
-    margin-top:0;
-
-    color:#0B1F3A;
 }
 
 /* ===============================
@@ -500,13 +376,6 @@ RESPONSIVE
         flex-direction:column;
 
         gap:12px;
-    }
-
-    .header-right{
-
-        width:100%;
-
-        justify-content:space-between;
     }
 
     .container{
@@ -536,15 +405,10 @@ HEADER
 
 <div class="header">
 
-    <div class="logo-section">
-
-        <img
-            src="logo.png"
-            alt="Innomayi Logo"
-            class="logo"
-        >
-
-    </div>
+    <img
+        src="logo.png"
+        class="logo"
+    >
 
     <div class="header-right">
 
@@ -626,25 +490,12 @@ ADD COMPONENT MODAL
 
         <input
             id="quantity"
-            placeholder="Quantity"
             type="number"
+            placeholder="Quantity"
         >
 
         <button onclick="addComponent()">
             Add Component
-        </button>
-
-        <hr>
-
-        <h3>Create Box</h3>
-
-        <input
-            id="newBox"
-            placeholder="New Box"
-        >
-
-        <button onclick="addBox()">
-            Create Box
         </button>
 
     </div>
@@ -704,182 +555,12 @@ TOAST
 const API =
 "https://innomayi-inventory.onrender.com";
 
-let inventory = {};
+let inventoryData = [];
+
+let filteredData = [];
 
 let isAdmin =
 localStorage.getItem("isAdmin") === "true";
-
-/* ===============================
-ADMIN STATE
-=============================== */
-
-function applyAdminState(){
-
-    const adminControls =
-    document.querySelectorAll(".admin-only");
-
-    adminControls.forEach(el=>{
-
-        el.style.display =
-            isAdmin ? "flex" : "none";
-    });
-
-    document
-    .getElementById("openModal")
-    .style.display =
-        isAdmin ? "flex" : "none";
-
-    document
-    .getElementById("logoutBtn")
-    .style.display =
-        isAdmin ? "block" : "none";
-
-    document
-    .getElementById("adminBtn")
-    .style.display =
-        isAdmin ? "none" : "block";
-}
-
-/* ===============================
-LOAD INVENTORY
-=============================== */
-
-async function loadInventory(){
-
-    try{
-
-        const res = await fetch(
-            API + "/inventory?t=" + Date.now()
-        );
-
-        const data = await res.json();
-
-        let formatted = {};
-
-        data.forEach(item=>{
-
-            if(!formatted[item.box]){
-
-                formatted[item.box] = [];
-            }
-
-            formatted[item.box].push({
-
-                id:item.id,
-
-                name:item.name,
-
-                quantity:item.quantity
-            });
-        });
-
-        inventory = formatted;
-
-        render();
-
-    }catch(err){
-
-        console.log(err);
-    }
-}
-
-/* ===============================
-RENDER
-=============================== */
-
-function render(){
-
-    let html = "";
-
-    for(let box in inventory){
-
-        html += `
-        <div class="box">
-
-            <h3>📦 Box ${box}</h3>
-        `;
-
-        inventory[box].forEach(c=>{
-
-            html += `
-            <div class="component">
-
-                <div class="comp-left">
-
-                    ${c.name}
-
-                </div>
-
-                <div class="comp-right">
-
-                    <span class="qty">
-
-                        Qty: ${c.quantity}
-
-                    </span>
-
-                    <div class="admin-only">
-
-                        <button
-                            class="qty-btn"
-                            onclick="
-                            updateQuantity(
-                                ${c.id},
-                                ${c.quantity - 1}
-                            )"
-                        >
-                        -
-                        </button>
-
-                        <button
-                            class="qty-btn"
-                            onclick="
-                            updateQuantity(
-                                ${c.id},
-                                ${c.quantity + 1}
-                            )"
-                        >
-                        +
-                        </button>
-
-                        <span
-                            class="edit-btn"
-                            onclick="
-                            editComponent(
-                                ${c.id},
-                                '${c.name}'
-                            )"
-                        >
-                        ✏️
-                        </span>
-
-                        <span
-                            class="delete-btn"
-                            onclick="
-                            deleteComponent(
-                                ${c.id}
-                            )"
-                        >
-                        ×
-                        </span>
-
-                    </div>
-
-                </div>
-
-            </div>
-            `;
-        });
-
-        html += `</div>`;
-    }
-
-    document
-    .getElementById("inventory")
-    .innerHTML = html;
-
-    applyAdminState();
-}
 
 /* ===============================
 TOAST
@@ -902,163 +583,181 @@ function showToast(msg){
 }
 
 /* ===============================
-ADD COMPONENT
+ADMIN STATE
 =============================== */
 
-async function addComponent(){
+function applyAdminState(){
 
-    const box =
-        document.getElementById("box").value;
+    document
+    .getElementById("adminBtn")
+    .style.display =
+        isAdmin ? "none" : "block";
 
-    const component =
-        document.getElementById("component").value;
+    document
+    .getElementById("logoutBtn")
+    .style.display =
+        isAdmin ? "block" : "none";
 
-    const quantity =
-        document.getElementById("quantity").value;
-
-    await fetch(
-        API + "/add-component",
-        {
-
-            method:"POST",
-
-            headers:{
-                "Content-Type":"application/json"
-            },
-
-            body:JSON.stringify({
-
-                box,
-
-                name:component,
-
-                quantity
-            })
-        }
-    );
-
-    showToast("✔ Component Added");
-
-    closeModal();
-
-    loadInventory();
+    document
+    .getElementById("openModal")
+    .style.display =
+        isAdmin ? "block" : "none";
 }
 
 /* ===============================
-ADD BOX
+LOAD INVENTORY
 =============================== */
 
-async function addBox(){
+async function loadInventory(){
 
-    const box =
-        document.getElementById("newBox").value;
+    try{
 
-    await fetch(
-        API + "/add-box",
-        {
+        const res = await fetch(
+            API + "/inventory"
+        );
 
-            method:"POST",
+        inventoryData =
+        await res.json();
 
-            headers:{
-                "Content-Type":"application/json"
-            },
+        filteredData =
+        [...inventoryData];
 
-            body:JSON.stringify({box})
-        }
-    );
+        render();
 
-    showToast("📦 Box Added");
+    }catch(err){
 
-    closeModal();
-
-    loadInventory();
+        console.log(err);
+    }
 }
 
 /* ===============================
-UPDATE QUANTITY
+RENDER
 =============================== */
 
-async function updateQuantity(id,newQty){
+function render(){
 
-    if(newQty < 0) return;
+    const container =
+    document.getElementById("inventory");
 
-    await fetch(
-        API + `/update-quantity/${id}`,
-        {
+    container.innerHTML = "";
 
-            method:"PUT",
+    let grouped = {};
 
-            headers:{
-                "Content-Type":"application/json"
-            },
+    filteredData.forEach(item=>{
 
-            body:JSON.stringify({
+        if(!grouped[item.box]){
 
-                quantity:newQty
-            })
+            grouped[item.box] = [];
         }
-    );
 
-    loadInventory();
-}
+        grouped[item.box].push(item);
+    });
 
-/* ===============================
-DELETE COMPONENT
-=============================== */
+    Object.keys(grouped).forEach(box=>{
 
-async function deleteComponent(id){
+        const boxDiv =
+        document.createElement("div");
 
-    if(!confirm(
-        "Delete component?"
-    )) return;
+        boxDiv.className = "box";
 
-    await fetch(
-        API + `/delete-component/${id}`,
-        {
+        let html = `
+        <h3>📦 Box ${box}</h3>
+        `;
 
-            method:"DELETE"
-        }
-    );
+        grouped[box].forEach(item=>{
 
-    showToast("❌ Component Deleted");
+            html += `
+            <div
+                class="component"
+                id="component-${item.id}"
+            >
 
-    loadInventory();
-}
+                <div class="comp-left">
 
-/* ===============================
-EDIT COMPONENT
-=============================== */
+                    <span
+                        id="name-${item.id}"
+                    >
+                        ${item.name}
+                    </span>
 
-async function editComponent(id,oldName){
+                </div>
 
-    const newName =
-    prompt(
-        "Enter new component name:",
-        oldName
-    );
+                <div class="comp-right">
 
-    if(!newName) return;
+                    <span
+                        class="qty"
+                        id="qty-${item.id}"
+                    >
+                        Qty: ${item.quantity}
+                    </span>
 
-    await fetch(
-        API + `/edit-component/${id}`,
-        {
+                    ${
+                        isAdmin
+                        ?
+                        `
+                        <div class="admin-only"
+                        style="display:flex;">
 
-            method:"PUT",
+                            <button
+                                class="qty-btn"
+                                onclick="
+                                changeQuantity(
+                                    ${item.id},
+                                    -1
+                                )"
+                            >
+                            -
+                            </button>
 
-            headers:{
-                "Content-Type":"application/json"
-            },
+                            <button
+                                class="qty-btn"
+                                onclick="
+                                changeQuantity(
+                                    ${item.id},
+                                    1
+                                )"
+                            >
+                            +
+                            </button>
 
-            body:JSON.stringify({
+                            <span
+                                class="edit-btn"
+                                onclick="
+                                editComponent(
+                                    ${item.id}
+                                )"
+                            >
+                            ✏️
+                            </span>
 
-                name:newName
-            })
-        }
-    );
+                            <span
+                                class="delete-btn"
+                                onclick="
+                                deleteComponent(
+                                    ${item.id}
+                                )"
+                            >
+                            ×
+                            </span>
 
-    showToast("✏️ Component Updated");
+                        </div>
+                        `
+                        :
+                        ""
+                    }
 
-    loadInventory();
+                </div>
+
+            </div>
+            `;
+        });
+
+        boxDiv.innerHTML = html;
+
+        container.appendChild(boxDiv);
+    });
+
+    applyAdminState();
 }
 
 /* ===============================
@@ -1072,58 +771,239 @@ document
     (e)=>{
 
     const q =
-    e.target.value.toLowerCase();
+    e.target.value
+    .toLowerCase();
 
-    if(!q){
+    filteredData =
+    inventoryData.filter(item=>
 
-        return loadInventory();
-    }
-
-    let filtered = {};
-
-    for(let box in inventory){
-
-        inventory[box].forEach(item=>{
-
-            if(
-                item.name
-                .toLowerCase()
-                .includes(q)
-            ){
-
-                if(!filtered[box]){
-
-                    filtered[box] = [];
-                }
-
-                filtered[box].push(item);
-            }
-        });
-    }
-
-    inventory = filtered;
+        item.name
+        .toLowerCase()
+        .includes(q)
+    );
 
     render();
 });
 
 /* ===============================
-MODAL
+CHANGE QUANTITY
 =============================== */
 
-document
-.getElementById("openModal")
-.onclick = ()=>{
+async function changeQuantity(
+    id,
+    change
+){
+
+    const item =
+    inventoryData.find(
+        i=>i.id === id
+    );
+
+    if(!item) return;
+
+    const newQty =
+    item.quantity + change;
+
+    if(newQty < 0) return;
+
+    item.quantity = newQty;
 
     document
-    .getElementById("modal")
-    .style.display = "flex";
-};
+    .getElementById(`qty-${id}`)
+    .innerText =
+    `Qty: ${newQty}`;
 
-function closeModal(){
+    try{
+
+        await fetch(
+            API +
+            `/update-quantity/${id}`,
+            {
+
+                method:"PUT",
+
+                headers:{
+                    "Content-Type":
+                    "application/json"
+                },
+
+                body:JSON.stringify({
+
+                    quantity:newQty
+                })
+            }
+        );
+
+    }catch(err){
+
+        console.log(err);
+    }
+}
+
+/* ===============================
+DELETE COMPONENT
+=============================== */
+
+async function deleteComponent(id){
+
+    if(!confirm(
+        "Delete component?"
+    )) return;
 
     document
-    .getElementById("modal")
-    .style.display = "none";
+    .getElementById(
+        `component-${id}`
+    )
+    .remove();
+
+    inventoryData =
+    inventoryData.filter(
+        i=>i.id !== id
+    );
+
+    filteredData =
+    filteredData.filter(
+        i=>i.id !== id
+    );
+
+    try{
+
+        await fetch(
+            API +
+            `/delete-component/${id}`,
+            {
+
+                method:"DELETE"
+            }
+        );
+
+        showToast(
+            "❌ Component Deleted"
+        );
+
+    }catch(err){
+
+        console.log(err);
+    }
+}
+
+/* ===============================
+EDIT COMPONENT
+=============================== */
+
+async function editComponent(id){
+
+    const item =
+    inventoryData.find(
+        i=>i.id === id
+    );
+
+    if(!item) return;
+
+    const newName =
+    prompt(
+        "Enter new component name:",
+        item.name
+    );
+
+    if(!newName) return;
+
+    item.name = newName;
+
+    document
+    .getElementById(`name-${id}`)
+    .innerText =
+    newName;
+
+    try{
+
+        await fetch(
+            API +
+            `/edit-component/${id}`,
+            {
+
+                method:"PUT",
+
+                headers:{
+                    "Content-Type":
+                    "application/json"
+                },
+
+                body:JSON.stringify({
+
+                    name:newName
+                })
+            }
+        );
+
+        showToast(
+            "✏️ Component Updated"
+        );
+
+    }catch(err){
+
+        console.log(err);
+    }
+}
+
+/* ===============================
+ADD COMPONENT
+=============================== */
+
+async function addComponent(){
+
+    const box =
+    document.getElementById("box")
+    .value;
+
+    const component =
+    document.getElementById("component")
+    .value;
+
+    const quantity =
+    Number(
+        document
+        .getElementById("quantity")
+        .value
+    );
+
+    try{
+
+        await fetch(
+            API +
+            "/add-component",
+            {
+
+                method:"POST",
+
+                headers:{
+                    "Content-Type":
+                    "application/json"
+                },
+
+                body:JSON.stringify({
+
+                    box,
+
+                    name:component,
+
+                    quantity
+                })
+            }
+        );
+
+        showToast(
+            "✔ Component Added"
+        );
+
+        closeModal();
+
+        loadInventory();
+
+    }catch(err){
+
+        console.log(err);
+    }
 }
 
 /* ===============================
@@ -1136,42 +1016,50 @@ document
 
     document
     .getElementById("loginModal")
-    .style.display = "flex";
+    .style.display =
+        "flex";
 };
 
 function closeLogin(){
 
     document
     .getElementById("loginModal")
-    .style.display = "none";
+    .style.display =
+        "none";
 }
 
 async function loginAdmin(){
 
     const username =
-        document.getElementById("username").value;
+    document.getElementById("username")
+    .value;
 
     const password =
-        document.getElementById("password").value;
+    document.getElementById("password")
+    .value;
 
-    const res = await fetch(
+    const res =
+    await fetch(
         API + "/admin-login",
         {
 
             method:"POST",
 
             headers:{
-                "Content-Type":"application/json"
+                "Content-Type":
+                "application/json"
             },
 
             body:JSON.stringify({
+
                 username,
                 password
             })
         }
     );
 
-    const data = await res.json();
+    const data =
+    await res.json();
 
     if(data.success){
 
@@ -1182,17 +1070,19 @@ async function loginAdmin(){
 
         isAdmin = true;
 
-        applyAdminState();
+        render();
+
+        closeLogin();
 
         showToast(
             "🔐 Admin Logged In"
         );
 
-        closeLogin();
-
     }else{
 
-        alert("Invalid Credentials");
+        alert(
+            "Invalid Credentials"
+        );
     }
 }
 
@@ -1210,43 +1100,40 @@ document
 
     isAdmin = false;
 
-    applyAdminState();
+    render();
 
     showToast(
         "🚪 Logged Out"
     );
 };
 
-window.onclick = (e)=>{
+/* ===============================
+MODAL
+=============================== */
 
-    if(
-        e.target ===
-        document.getElementById("modal")
-    ){
+document
+.getElementById("openModal")
+.onclick = ()=>{
 
-        closeModal();
-    }
-
-    if(
-        e.target ===
-        document.getElementById("loginModal")
-    ){
-
-        closeLogin();
-    }
+    document
+    .getElementById("modal")
+    .style.display =
+        "flex";
 };
+
+function closeModal(){
+
+    document
+    .getElementById("modal")
+    .style.display =
+        "none";
+}
 
 /* ===============================
 INITIAL LOAD
 =============================== */
 
-applyAdminState();
-
-setTimeout(()=>{
-
-    loadInventory();
-
-},1500);
+loadInventory();
 
 </script>
 
