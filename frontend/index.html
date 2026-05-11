@@ -789,10 +789,6 @@ document
 CHANGE QUANTITY
 =============================== */
 
-/* ===============================
-SMART QUANTITY UPDATE
-=============================== */
-
 let updatingItems = {};
 
 async function changeQuantity(
@@ -832,7 +828,7 @@ async function changeQuantity(
     }
 
     /* =========================
-       DISABLE BUTTONS
+       GET COMPONENT BUTTONS
     ========================= */
 
     const componentDiv =
@@ -844,6 +840,10 @@ async function changeQuantity(
     componentDiv.querySelectorAll(
         ".qty-btn"
     );
+
+    /* =========================
+       DISABLE BUTTONS TEMPORARILY
+    ========================= */
 
     buttons.forEach(btn=>{
 
@@ -905,7 +905,7 @@ async function changeQuantity(
     }catch(err){
 
         /* =====================
-           ROLLBACK
+           ROLLBACK IF FAILED
         ===================== */
 
         item.quantity = oldQty;
@@ -936,53 +936,6 @@ async function changeQuantity(
     });
 
     updatingItems[id] = false;
-}
-{
-
-    const item =
-    inventoryData.find(
-        i=>i.id === id
-    );
-
-    if(!item) return;
-
-    const newQty =
-    item.quantity + change;
-
-    if(newQty < 0) return;
-
-    item.quantity = newQty;
-
-    document
-    .getElementById(`qty-${id}`)
-    .innerText =
-    `Qty: ${newQty}`;
-
-    try{
-
-        await fetch(
-            API +
-            `/update-quantity/${id}`,
-            {
-
-                method:"PUT",
-
-                headers:{
-                    "Content-Type":
-                    "application/json"
-                },
-
-                body:JSON.stringify({
-
-                    quantity:newQty
-                })
-            }
-        );
-
-    }catch(err){
-
-        console.log(err);
-    }
 }
 
 /* ===============================
