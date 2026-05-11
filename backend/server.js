@@ -233,6 +233,47 @@ app.put(
 });
 
 /* ===============================
+EDIT COMPONENT NAME
+=============================== */
+
+app.put(
+    "/edit-component/:id",
+    (req,res)=>{
+
+    const { id } = req.params;
+
+    const { name } = req.body;
+
+    const sql = `
+    
+    UPDATE components
+
+    SET name = ?
+
+    WHERE id = ?
+    
+    `;
+
+    db.query(
+        sql,
+        [
+            name,
+            id
+        ],
+        (err,result)=>{
+
+        if(err){
+
+            return res.status(500).json(err);
+        }
+
+        res.json({
+            success:true
+        });
+    });
+});
+
+/* ===============================
 DELETE COMPONENT
 =============================== */
 
@@ -298,6 +339,15 @@ app.post(
             success:false
         });
     }
+});
+
+/* ===============================
+LOGS
+=============================== */
+
+app.get("/logs",(req,res)=>{
+
+    res.json([]);
 });
 
 /* ===============================

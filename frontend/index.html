@@ -31,11 +31,7 @@ HEADER
 
 .header{
 
-    background:linear-gradient(
-        90deg,
-        #0b1f3a,
-        #0b1f3a
-    );
+    background:#0B1F3A;
 
     padding:18px 22px;
 
@@ -50,17 +46,29 @@ HEADER
     box-shadow:0 4px 12px rgba(0,0,0,0.15);
 }
 
-/* LOGO */
-
 .logo-section{
+
     display:flex;
+
     align-items:center;
+
     gap:12px;
 }
 
 .logo{
+
     height:60px;
+
     object-fit:contain;
+}
+
+.header-right{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:10px;
 }
 
 /* SEARCH */
@@ -86,12 +94,13 @@ HEADER
 
 .search:focus{
 
-    width:150px;
+    width:160px;
 }
 
-/* ADMIN BUTTON */
+/* BUTTONS */
 
-.admin-btn{
+.admin-btn,
+.logout-btn{
 
     background:#2563EB;
 
@@ -110,7 +119,13 @@ HEADER
     transition:0.2s;
 }
 
-.admin-btn:hover{
+.logout-btn{
+
+    background:#DC2626;
+}
+
+.admin-btn:hover,
+.logout-btn:hover{
 
     transform:scale(1.05);
 }
@@ -248,6 +263,13 @@ BUTTONS
     font-weight:bold;
 
     font-size:18px;
+}
+
+.edit-btn{
+
+    cursor:pointer;
+
+    font-size:16px;
 }
 
 /* ===============================
@@ -467,17 +489,8 @@ LOGS
     color:#0B1F3A;
 }
 
-.log-item{
-
-    padding:10px;
-
-    border-bottom:1px solid #E2E8F0;
-
-    font-size:14px;
-}
-
 /* ===============================
-MOBILE RESPONSIVE
+RESPONSIVE
 =============================== */
 
 @media(max-width:768px){
@@ -489,14 +502,11 @@ MOBILE RESPONSIVE
         gap:12px;
     }
 
-    .logo{
-
-        height:45px;
-    }
-
-    .search{
+    .header-right{
 
         width:100%;
+
+        justify-content:space-between;
     }
 
     .container{
@@ -512,14 +522,6 @@ MOBILE RESPONSIVE
 
         gap:10px;
     }
-
-    .comp-right{
-
-        width:100%;
-
-        justify-content:space-between;
-    }
-
 }
 
 </style>
@@ -544,18 +546,30 @@ HEADER
 
     </div>
 
-    <input
-        id="search"
-        class="search"
-        placeholder="Search..."
-    >
+    <div class="header-right">
 
-    <button
-        id="adminBtn"
-        class="admin-btn"
-    >
-    Admin Login
-    </button>
+        <input
+            id="search"
+            class="search"
+            placeholder="Search..."
+        >
+
+        <button
+            id="adminBtn"
+            class="admin-btn"
+        >
+        Admin Login
+        </button>
+
+        <button
+            id="logoutBtn"
+            class="logout-btn"
+            style="display:none;"
+        >
+        Logout
+        </button>
+
+    </div>
 
 </div>
 
@@ -569,24 +583,13 @@ INVENTORY
 ></div>
 
 <!-- ===============================
-ACTIVITY LOGS
-=============================== -->
-
-<div class="logs">
-
-    <h3>🧾 Activity Logs</h3>
-
-    <div id="logs"></div>
-
-</div>
-
-<!-- ===============================
 FLOAT BUTTON
 =============================== -->
 
 <button
     id="openModal"
-    class="fab admin-only"
+    class="fab"
+    style="display:none;"
 >
 +
 </button>
@@ -649,7 +652,7 @@ ADD COMPONENT MODAL
 </div>
 
 <!-- ===============================
-ADMIN LOGIN MODAL
+LOGIN MODAL
 =============================== -->
 
 <div
@@ -698,7 +701,44 @@ TOAST
 
 <script>
 
+const API =
+"https://innomayi-inventory.onrender.com";
+
 let inventory = {};
+
+let isAdmin =
+localStorage.getItem("isAdmin") === "true";
+
+/* ===============================
+ADMIN STATE
+=============================== */
+
+function applyAdminState(){
+
+    const adminControls =
+    document.querySelectorAll(".admin-only");
+
+    adminControls.forEach(el=>{
+
+        el.style.display =
+            isAdmin ? "flex" : "none";
+    });
+
+    document
+    .getElementById("openModal")
+    .style.display =
+        isAdmin ? "flex" : "none";
+
+    document
+    .getElementById("logoutBtn")
+    .style.display =
+        isAdmin ? "block" : "none";
+
+    document
+    .getElementById("adminBtn")
+    .style.display =
+        isAdmin ? "none" : "block";
+}
 
 /* ===============================
 LOAD INVENTORY
@@ -706,72 +746,40 @@ LOAD INVENTORY
 
 async function loadInventory(){
 
-    const res = await fetch(
-        "https://innomayi-inventory.onrender.com/inventory?t=" + Date.now()
-    );
-
-    const data = await res.json();
-
-    let formatted = {};
-
-    data.forEach(item=>{
-
-        if(!formatted[item.box]){
-
-            formatted[item.box] = [];
-        }
-
-        formatted[item.box].push({
-
-    name:
-        item.component_name ||
-        item.name,
-
-    quantity:item.quantity,
-
-    id:item.id
-});
-    });
-
-    inventory = formatted;
-
-    render();
-}
-
-/* ===============================
-LOAD LOGS
-=============================== */
-
-async function loadLogs(){
-
     try{
 
         const res = await fetch(
-            "https://innomayi-inventory.onrender.com/logs"
+            API + "/inventory?t=" + Date.now()
         );
 
         const data = await res.json();
 
-        let html = "";
+        let formatted = {};
 
-        data.forEach(log=>{
+        data.forEach(item=>{
 
-            html += `
-            <div class="log-item">
+            if(!formatted[item.box]){
 
-                ${log.action_text}
+                formatted[item.box] = [];
+            }
 
-            </div>
-            `;
+            formatted[item.box].push({
+
+                id:item.id,
+
+                name:item.name,
+
+                quantity:item.quantity
+            });
         });
 
-        document.getElementById("logs")
-        .innerHTML = html;
+        inventory = formatted;
+
+        render();
 
     }catch(err){
 
-        document.getElementById("logs")
-        .innerHTML = "No logs available";
+        console.log(err);
     }
 }
 
@@ -817,8 +825,7 @@ function render(){
                             onclick="
                             updateQuantity(
                                 ${c.id},
-                                ${c.quantity},
-                                'decrease'
+                                ${c.quantity - 1}
                             )"
                         >
                         -
@@ -829,12 +836,22 @@ function render(){
                             onclick="
                             updateQuantity(
                                 ${c.id},
-                                ${c.quantity},
-                                'increase'
+                                ${c.quantity + 1}
                             )"
                         >
                         +
                         </button>
+
+                        <span
+                            class="edit-btn"
+                            onclick="
+                            editComponent(
+                                ${c.id},
+                                '${c.name}'
+                            )"
+                        >
+                        ✏️
+                        </span>
 
                         <span
                             class="delete-btn"
@@ -857,8 +874,11 @@ function render(){
         html += `</div>`;
     }
 
-    document.getElementById("inventory")
+    document
+    .getElementById("inventory")
     .innerHTML = html;
+
+    applyAdminState();
 }
 
 /* ===============================
@@ -897,7 +917,7 @@ async function addComponent(){
         document.getElementById("quantity").value;
 
     await fetch(
-        "https://innomayi-inventory.onrender.com/add-component",
+        API + "/add-component",
         {
 
             method:"POST",
@@ -909,7 +929,9 @@ async function addComponent(){
             body:JSON.stringify({
 
                 box,
+
                 name:component,
+
                 quantity
             })
         }
@@ -917,11 +939,9 @@ async function addComponent(){
 
     showToast("✔ Component Added");
 
-    loadInventory();
-
-    loadLogs();
-
     closeModal();
+
+    loadInventory();
 }
 
 /* ===============================
@@ -934,7 +954,7 @@ async function addBox(){
         document.getElementById("newBox").value;
 
     await fetch(
-        "https://innomayi-inventory.onrender.com/add-box",
+        API + "/add-box",
         {
 
             method:"POST",
@@ -947,65 +967,23 @@ async function addBox(){
         }
     );
 
-    showToast("📦 Box Created");
-
-    loadInventory();
-
-    loadLogs();
+    showToast("📦 Box Added");
 
     closeModal();
-}
-
-/* ===============================
-DELETE COMPONENT
-=============================== */
-
-async function deleteComponent(id){
-
-    if(!confirm(
-        "Delete component?"
-    )) return;
-
-    await fetch(
-        `https://innomayi-inventory.onrender.com/delete-component/${id}`,
-        {
-
-            method:"DELETE"
-        }
-    );
-
-    showToast("❌ Component Deleted");
 
     loadInventory();
-
-    loadLogs();
 }
 
 /* ===============================
 UPDATE QUANTITY
 =============================== */
 
-async function updateQuantity(
-    id,
-    quantity,
-    action
-){
+async function updateQuantity(id,newQty){
 
-    let newQty = quantity;
-
-    if(action === 'increase'){
-
-        newQty++;
-
-    }else{
-
-        if(quantity <= 0) return;
-
-        newQty--;
-    }
+    if(newQty < 0) return;
 
     await fetch(
-        `https://innomayi-inventory.onrender.com/update-quantity/${id}`,
+        API + `/update-quantity/${id}`,
         {
 
             method:"PUT",
@@ -1022,8 +1000,65 @@ async function updateQuantity(
     );
 
     loadInventory();
+}
 
-    loadLogs();
+/* ===============================
+DELETE COMPONENT
+=============================== */
+
+async function deleteComponent(id){
+
+    if(!confirm(
+        "Delete component?"
+    )) return;
+
+    await fetch(
+        API + `/delete-component/${id}`,
+        {
+
+            method:"DELETE"
+        }
+    );
+
+    showToast("❌ Component Deleted");
+
+    loadInventory();
+}
+
+/* ===============================
+EDIT COMPONENT
+=============================== */
+
+async function editComponent(id,oldName){
+
+    const newName =
+    prompt(
+        "Enter new component name:",
+        oldName
+    );
+
+    if(!newName) return;
+
+    await fetch(
+        API + `/edit-component/${id}`,
+        {
+
+            method:"PUT",
+
+            headers:{
+                "Content-Type":"application/json"
+            },
+
+            body:JSON.stringify({
+
+                name:newName
+            })
+        }
+    );
+
+    showToast("✏️ Component Updated");
+
+    loadInventory();
 }
 
 /* ===============================
@@ -1034,9 +1069,10 @@ document
 .getElementById("search")
 .addEventListener(
     "input",
-    async(e)=>{
+    (e)=>{
 
-    const q = e.target.value.toLowerCase();
+    const q =
+    e.target.value.toLowerCase();
 
     if(!q){
 
@@ -1050,12 +1086,10 @@ document
         inventory[box].forEach(item=>{
 
             if(
-    (item.name || "")
-    .toLowerCase()
-    .includes(q)
-)
-            
-            {
+                item.name
+                .toLowerCase()
+                .includes(q)
+            ){
 
                 if(!filtered[box]){
 
@@ -1093,7 +1127,7 @@ function closeModal(){
 }
 
 /* ===============================
-ADMIN LOGIN
+LOGIN
 =============================== */
 
 document
@@ -1121,7 +1155,7 @@ async function loginAdmin(){
         document.getElementById("password").value;
 
     const res = await fetch(
-        "https://innomayi-inventory.onrender.com/admin-login",
+        API + "/admin-login",
         {
 
             method:"POST",
@@ -1141,14 +1175,18 @@ async function loginAdmin(){
 
     if(data.success){
 
-        document
-        .querySelectorAll(".admin-only")
-        .forEach(el=>{
+        localStorage.setItem(
+            "isAdmin",
+            "true"
+        );
 
-            el.style.display = "flex";
-        });
+        isAdmin = true;
 
-        showToast("🔐 Admin Logged In");
+        applyAdminState();
+
+        showToast(
+            "🔐 Admin Logged In"
+        );
 
         closeLogin();
 
@@ -1157,6 +1195,27 @@ async function loginAdmin(){
         alert("Invalid Credentials");
     }
 }
+
+/* ===============================
+LOGOUT
+=============================== */
+
+document
+.getElementById("logoutBtn")
+.onclick = ()=>{
+
+    localStorage.removeItem(
+        "isAdmin"
+    );
+
+    isAdmin = false;
+
+    applyAdminState();
+
+    showToast(
+        "🚪 Logged Out"
+    );
+};
 
 window.onclick = (e)=>{
 
@@ -1181,9 +1240,13 @@ window.onclick = (e)=>{
 INITIAL LOAD
 =============================== */
 
-loadInventory();
+applyAdminState();
 
-loadLogs();
+setTimeout(()=>{
+
+    loadInventory();
+
+},1500);
 
 </script>
 
