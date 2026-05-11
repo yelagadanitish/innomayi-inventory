@@ -789,10 +789,155 @@ document
 CHANGE QUANTITY
 =============================== */
 
+/* ===============================
+SMART QUANTITY UPDATE
+=============================== */
+
+let updatingItems = {};
+
 async function changeQuantity(
     id,
     change
 ){
+
+    /* =========================
+       PREVENT MULTIPLE CLICKS
+    ========================= */
+
+    if(updatingItems[id]) return;
+
+    updatingItems[id] = true;
+
+    const item =
+    inventoryData.find(
+        i => i.id === id
+    );
+
+    if(!item){
+
+        updatingItems[id] = false;
+        return;
+    }
+
+    const oldQty =
+    item.quantity;
+
+    const newQty =
+    oldQty + change;
+
+    if(newQty < 0){
+
+        updatingItems[id] = false;
+        return;
+    }
+
+    /* =========================
+       DISABLE BUTTONS
+    ========================= */
+
+    const componentDiv =
+    document.getElementById(
+        `component-${id}`
+    );
+
+    const buttons =
+    componentDiv.querySelectorAll(
+        ".qty-btn"
+    );
+
+    buttons.forEach(btn=>{
+
+        btn.disabled = true;
+
+        btn.style.opacity = "0.5";
+
+        btn.style.cursor =
+        "not-allowed";
+    });
+
+    /* =========================
+       INSTANT UI UPDATE
+    ========================= */
+
+    item.quantity = newQty;
+
+    const qtyElement =
+    document.getElementById(
+        `qty-${id}`
+    );
+
+    if(qtyElement){
+
+        qtyElement.innerText =
+        `Qty: ${newQty}`;
+    }
+
+    try{
+
+        const res = await fetch(
+
+            API +
+            `/update-quantity/${id}`,
+
+            {
+
+                method:"PUT",
+
+                headers:{
+                    "Content-Type":
+                    "application/json"
+                },
+
+                body:JSON.stringify({
+
+                    quantity:newQty
+                })
+            }
+        );
+
+        if(!res.ok){
+
+            throw new Error(
+                "Update failed"
+            );
+        }
+
+    }catch(err){
+
+        /* =====================
+           ROLLBACK
+        ===================== */
+
+        item.quantity = oldQty;
+
+        if(qtyElement){
+
+            qtyElement.innerText =
+            `Qty: ${oldQty}`;
+        }
+
+        alert(
+            "Failed to update quantity"
+        );
+    }
+
+    /* =========================
+       ENABLE BUTTONS AGAIN
+    ========================= */
+
+    buttons.forEach(btn=>{
+
+        btn.disabled = false;
+
+        btn.style.opacity = "1";
+
+        btn.style.cursor =
+        "pointer";
+    });
+
+    updatingItems[id] = false;
+}
+{
 
     const item =
     inventoryData.find(
@@ -998,7 +1143,11 @@ async function addComponent(){
 
         closeModal();
 
-        loadInventory();
+        setTimeout(()=>{
+
+    loadInventory();
+
+},1000);
 
     }catch(err){
 
