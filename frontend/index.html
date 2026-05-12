@@ -22,9 +22,6 @@ body{
     overflow-x:hidden;
 }
 
-/* ===============================
-HEADER
-=============================== */
 
 .header{
 
@@ -98,9 +95,6 @@ HEADER
     background:#DC2626;
 }
 
-/* ===============================
-CONTAINER
-=============================== */
 
 .container{
 
@@ -114,9 +108,6 @@ CONTAINER
     gap:18px;
 }
 
-/* ===============================
-BOX
-=============================== */
 
 .box{
 
@@ -136,10 +127,6 @@ BOX
 
     color:#0B1F3A;
 }
-
-/* ===============================
-COMPONENT
-=============================== */
 
 .component{
 
@@ -181,9 +168,6 @@ COMPONENT
     flex-shrink:0;
 }
 
-/* ===============================
-BUTTONS
-=============================== */
 
 .qty-btn{
 
@@ -231,9 +215,6 @@ BUTTONS
     gap:8px;
 }
 
-/* ===============================
-FLOAT BUTTON
-=============================== */
 
 .fab{
 
@@ -259,10 +240,6 @@ FLOAT BUTTON
 
     cursor:pointer;
 }
-
-/* ===============================
-MODAL
-=============================== */
 
 .modal{
 
@@ -341,9 +318,6 @@ MODAL
     font-size:20px;
 }
 
-/* ===============================
-TOAST
-=============================== */
 
 .toast{
 
@@ -371,9 +345,6 @@ TOAST
     opacity:1;
 }
 
-/* ===============================
-RESPONSIVE
-=============================== */
 
 @media(max-width:768px){
 
@@ -405,9 +376,6 @@ RESPONSIVE
 
 <body>
 
-<!-- ===============================
-HEADER
-=============================== -->
 
 <div class="header">
 
@@ -443,18 +411,12 @@ HEADER
 
 </div>
 
-<!-- ===============================
-INVENTORY
-=============================== -->
 
 <div
     id="inventory"
     class="container"
 ></div>
 
-<!-- ===============================
-FLOAT BUTTON
-=============================== -->
 
 <button
     id="openModal"
@@ -464,9 +426,6 @@ FLOAT BUTTON
 +
 </button>
 
-<!-- ===============================
-ADD COMPONENT MODAL
-=============================== -->
 
 <div
     class="modal"
@@ -508,9 +467,6 @@ ADD COMPONENT MODAL
 
 </div>
 
-<!-- ===============================
-LOGIN MODAL
-=============================== -->
 
 <div
     class="modal"
@@ -547,9 +503,6 @@ LOGIN MODAL
 
 </div>
 
-<!-- ===============================
-TOAST
-=============================== -->
 
 <div
     id="toast"
@@ -568,9 +521,7 @@ let filteredData = [];
 let isAdmin =
 localStorage.getItem("isAdmin") === "true";
 
-/* ===============================
-TOAST
-=============================== */
+
 
 function showToast(msg){
 
@@ -588,9 +539,7 @@ function showToast(msg){
     },2000);
 }
 
-/* ===============================
-ADMIN STATE
-=============================== */
+
 
 function applyAdminState(){
 
@@ -636,9 +585,6 @@ async function loadInventory(){
     }
 }
 
-/* ===============================
-RENDER
-=============================== */
 
 function render(){
 
@@ -791,9 +737,7 @@ document
     render();
 });
 
-/* ===============================
-CHANGE QUANTITY
-=============================== */
+
 
 let updatingItems = {};
 
@@ -802,9 +746,7 @@ async function changeQuantity(
     change
 ){
 
-    /* =========================
-       PREVENT MULTIPLE CLICKS
-    ========================= */
+    
 
     if(updatingItems[id]) return;
 
@@ -833,9 +775,6 @@ async function changeQuantity(
         return;
     }
 
-    /* =========================
-       GET COMPONENT BUTTONS
-    ========================= */
 
     const componentDiv =
     document.getElementById(
@@ -847,9 +786,7 @@ async function changeQuantity(
         ".qty-btn"
     );
 
-    /* =========================
-       DISABLE BUTTONS TEMPORARILY
-    ========================= */
+
 
     buttons.forEach(btn=>{
 
@@ -860,10 +797,6 @@ async function changeQuantity(
         btn.style.cursor =
         "not-allowed";
     });
-
-    /* =========================
-       INSTANT UI UPDATE
-    ========================= */
 
     item.quantity = newQty;
 
@@ -910,9 +843,7 @@ async function changeQuantity(
 
     }catch(err){
 
-        /* =====================
-           ROLLBACK IF FAILED
-        ===================== */
+
 
         item.quantity = oldQty;
 
@@ -927,9 +858,6 @@ async function changeQuantity(
         );
     }
 
-    /* =========================
-       ENABLE BUTTONS AGAIN
-    ========================= */
 
     buttons.forEach(btn=>{
 
@@ -943,10 +871,6 @@ async function changeQuantity(
 
     updatingItems[id] = false;
 }
-
-/* ===============================
-DELETE COMPONENT
-=============================== */
 
 async function deleteComponent(id){
 
@@ -990,10 +914,6 @@ async function deleteComponent(id){
         console.log(err);
     }
 }
-
-/* ===============================
-EDIT COMPONENT
-=============================== */
 
 async function editComponent(id){
 
@@ -1050,9 +970,6 @@ async function editComponent(id){
     }
 }
 
-/* ===============================
-ADD COMPONENT
-=============================== */
 
 async function addComponent(){
 
@@ -1113,10 +1030,6 @@ async function addComponent(){
         console.log(err);
     }
 }
-
-/* ===============================
-LOGIN
-=============================== */
 
 document
 .getElementById("adminBtn")
@@ -1194,9 +1107,6 @@ async function loginAdmin(){
     }
 }
 
-/* ===============================
-LOGOUT
-=============================== */
 
 document
 .getElementById("logoutBtn")
@@ -1215,9 +1125,6 @@ document
     );
 };
 
-/* ===============================
-MODAL
-=============================== */
 
 document
 .getElementById("openModal")
@@ -1237,9 +1144,6 @@ function closeModal(){
         "none";
 }
 
-/* ===============================
-INITIAL LOAD
-=============================== */
 
 loadInventory();
 
