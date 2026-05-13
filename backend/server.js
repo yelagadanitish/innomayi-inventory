@@ -8,9 +8,6 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-/* ===============================
-DATABASE CONNECTION
-=============================== */
 
 const db = mysql.createConnection({
 
@@ -42,9 +39,6 @@ db.connect((err)=>{
     }
 });
 
-/* ===============================
-GET INVENTORY
-=============================== */
 
 app.get("/inventory",(req,res)=>{
 
@@ -81,9 +75,6 @@ app.get("/inventory",(req,res)=>{
     });
 });
 
-/* ===============================
-ADD COMPONENT
-=============================== */
 
 app.post("/add-component",(req,res)=>{
 
@@ -159,10 +150,6 @@ app.post("/add-component",(req,res)=>{
     });
 });
 
-/* ===============================
-ADD BOX
-=============================== */
-
 app.post("/add-box",(req,res)=>{
 
     const { box } = req.body;
@@ -190,10 +177,6 @@ app.post("/add-box",(req,res)=>{
         });
     });
 });
-
-/* ===============================
-UPDATE QUANTITY
-=============================== */
 
 app.put(
     "/update-quantity/:id",
@@ -232,10 +215,6 @@ app.put(
     });
 });
 
-/* ===============================
-EDIT COMPONENT NAME
-=============================== */
-
 app.put(
     "/edit-component/:id",
     (req,res)=>{
@@ -273,9 +252,6 @@ app.put(
     });
 });
 
-/* ===============================
-DELETE COMPONENT
-=============================== */
 
 app.delete(
     "/delete-component/:id",
@@ -307,9 +283,6 @@ app.delete(
     });
 });
 
-/* ===============================
-ADMIN LOGIN
-=============================== */
 
 app.post(
     "/admin-login",
@@ -341,18 +314,11 @@ app.post(
     }
 });
 
-/* ===============================
-LOGS
-=============================== */
-
 app.get("/logs",(req,res)=>{
 
     res.json([]);
 });
 
-/* ===============================
-START SERVER
-=============================== */
 
 const PORT =
     process.env.PORT || 5000;
